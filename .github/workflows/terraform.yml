@@ -1,0 +1,33 @@
+name: Terraform Deployment
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - main  # Sostituisci con il tuo branch principale, se diverso
+
+jobs:
+  terraform:
+    name: Run Terraform
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: 1.4.5  # Sostituisci con la versione di Terraform che stai usando
+
+    - name: Terraform Init
+      run: terraform init -backend-config="storage_account_name=${{ secrets.AZURE_STORAGE_ACCOUNT_NAME }}" -backend-config="container_name=${{ secrets.AZURE_STORAGE_CONTAINER_NAME }}" -backend-config="access_key=${{ secrets.AZURE_STORAGE_ACCESS_KEY }}" -backend-config="key=terraform.tfstate"
+
+    - name: Terraform Validate
+      run: terraform validate
+
+    - name: Terraform Plan
+      run: terraform plan -var-file=environment/dev/terraform.tfvars
+
+    - name: Terraform Apply
+      run: terraform apply -auto-approve -var-file=environment/dev/terraform.tfvars
