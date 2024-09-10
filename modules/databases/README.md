@@ -1,0 +1,1 @@
+[PostgreSQL Terraform Doc](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_database)

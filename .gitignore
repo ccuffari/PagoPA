@@ -1,0 +1,9 @@
+# Evita di includere i file di stato di Terraform
+*.tfstate
+*.tfstate.backup
+
+# Evita di includere la directory .terraform
+.terraform/
+
+# Escludi i file di variabili sensibili
+terraform.tfvars
