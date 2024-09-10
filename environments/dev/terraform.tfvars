@@ -53,6 +53,17 @@ storage_accounts = {
       environment = "dev"
       project     = "PagoPA"
     }
+  },
+  storage3 = {
+    name                    = "devstorage3cfc"
+    resource_group_name      = "dev-rg-cfc"
+    location                = "West Europe"
+    account_tier            = "Standard"
+    account_replication_type = "LRS"
+    tags                    = {
+      environment = "dev"
+      project     = "PagoPA"
+    }
   }
 }
 
