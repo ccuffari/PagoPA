@@ -4,7 +4,7 @@ on:
   pull_request:
     types: [closed]
     branches:
-      - main  # Sostituisci con il tuo branch principale, se diverso
+      - main
 
 jobs:
   terraform:
@@ -18,16 +18,27 @@ jobs:
     - name: Set up Terraform
       uses: hashicorp/setup-terraform@v2
       with:
-        terraform_version: 1.4.5  # Sostituisci con la versione di Terraform che stai usando
+        terraform_version: 1.4.5
+
+    - name: List files in environments/dev
+      run: ls -la environments/dev
 
     - name: Terraform Init
-      run: terraform init -backend-config="storage_account_name=${{ secrets.AZURE_STORAGE_ACCOUNT_NAME }}" -backend-config="container_name=${{ secrets.AZURE_STORAGE_CONTAINER_NAME }}" -backend-config="access_key=${{ secrets.AZURE_STORAGE_ACCESS_KEY }}" -backend-config="key=terraform.tfstate"
+      run: |
+        cd environments/dev
+        terraform init -backend-config="storage_account_name=${{ secrets.AZURE_STORAGE_ACCOUNT_NAME }}" -backend-config="container_name=${{ secrets.AZURE_STORAGE_CONTAINER_NAME }}" -backend-config="access_key=${{ secrets.AZURE_STORAGE_ACCESS_KEY }}" -backend-config="key=terraform.tfstate"
 
     - name: Terraform Validate
-      run: terraform validate
+      run: |
+        cd environments/dev
+        terraform validate
 
     - name: Terraform Plan
-      run: terraform plan -var-file=environments/dev/terraform.tfvars
+      run: |
+        cd environments/dev
+        terraform plan -var-file=terraform.tfvars
 
     - name: Terraform Apply
-      run: terraform apply -auto-approve -var-file=environments/dev/terraform.tfvars
+      run: |
+        cd environments/dev
+        terraform apply -auto-approve -var-file=terraform.tfvars
