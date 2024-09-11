@@ -1,126 +1,90 @@
-# Valori per le istanze Redis
-redis_instances = {
-  redis1 = {
-    name                = "dev-redis1"
-    location            = "West Europe"
+resource_group_name    = "dev-rg-cfc"
+# Configurazione Virtual Network
+vnet = {
+  vnet1 = {
+    resource_group_name    = "dev-rg-cfc"
+    location               = "Italy North"
+    vnet_name              = "vnet-cosmosdb-cfc"
+    address_space          = ["10.0.0.0/16"]
+    subnet_name            = "subnet-cosmosdb-cfc"
+    subnet_address_prefix = ["10.0.1.0/24"]
+  }
+}
+
+key_vaults = {
+  "kv1" = {
+    name                = "mykeyvault1-cfc"
+    location            = "Italy North"
     resource_group_name = "dev-rg-cfc"
-    capacity            = 2
-    family              = "C"
-    sku_name            = "Standard"
-    enable_non_ssl_port = false
-    minimum_tls_version = "1.2"
-    tags                = {
+    sku_name             = "standard"
+    tags = {
       environment = "dev"
-      project     = "PagoPA"
     }
-  },
-  redis2 = {
-    name                = "dev-redis2"
-    location            = "West Europe"
-    resource_group_name = "dev-rg-cfc"
-    capacity            = 2
-    family              = "C"
-    sku_name            = "Standard"
-    enable_non_ssl_port = false
-    minimum_tls_version = "1.2"
-    tags                = {
-      environment = "dev"
-      project     = "PagoPA"
+    access_policy = {
+      object_id                  = "00000000-0000-0000-0000-000000000000"
+      key_permissions            = ["Get", "List"]
+      secret_permissions         = ["Get", "List"]
+      certificate_permissions    = ["Get", "List"]
+      storage_permissions        = ["Get", "List"]
     }
   }
 }
 
-# Valori per gli storage account
-storage_accounts = {
-  storage1 = {
-    name                    = "devstorage1cfc"
-    resource_group_name      = "dev-rg-cfc"
-    location                = "West Europe"
-    account_tier            = "Standard"
-    account_replication_type = "LRS"
-    tags                    = {
+tenant_id = "bb1a63eb-eb09-471a-a005-37b07792a5b5"
+
+# Definizione degli account Cosmos DB
+cosmosdb_accounts = {
+  account1 = {
+    name                      = "cosmosdb-account1-cfc"
+    location                  = "Italy North"
+    resource_group_name       = "dev-rg-cfc"
+    consistency_level         = "Strong"
+    is_virtual_network_filter_enabled = true
+    geo_location              = "Italy North"
+    failover_priority         = 0
+    tags                      = {
       environment = "dev"
-      project     = "PagoPA"
-    }
-  },
-  storage2 = {
-    name                    = "devstorage2cfc"
-    resource_group_name      = "dev-rg-cfc"
-    location                = "West Europe"
-    account_tier            = "Standard"
-    account_replication_type = "LRS"
-    tags                    = {
-      environment = "dev"
-      project     = "PagoPA"
-    }
-  },
-  storage3 = {
-    name                    = "devstorage3cfc"
-    resource_group_name      = "dev-rg-cfc"
-    location                = "West Europe"
-    account_tier            = "Standard"
-    account_replication_type = "LRS"
-    tags                    = {
-      environment = "dev"
-      project     = "PagoPA"
     }
   }
 }
 
-
-# Valori per le macchine virtuali
-vm_instances = {
-  vm1 = {
-    vm_name              = "dev-vm1"
-    location             = "West Europe"
-    resource_group_name  = "dev-rg-cfc"
-    subnet_id            = "/subscriptions/<subscription_id>/resourceGroups/dev-rg-cfc/providers/Microsoft.Network/virtualNetworks/dev-vnet/subnets/dev-subnet"
-    vm_size              = "Standard_B2ms"
-    admin_username       = "adminuser"
-    admin_password       = "P@ssw0rd!"
-    tags = {
-      environment = "dev"
-      project     = "PagoPA"
-    }
-  },
-  vm2 = {
-    vm_name              = "dev-vm2"
-    location             = "West Europe"
-    resource_group_name  = "dev-rg-cfc"
-    subnet_id            = "/subscriptions/<subscription_id>/resourceGroups/dev-rg-cfc/providers/Microsoft.Network/virtualNetworks/dev-vnet/subnets/dev-subnet"
-    vm_size              = "Standard_B2ms"
-    admin_username       = "adminuser"
-    admin_password       = "P@ssw0rd!"
-    tags = {
-      environment = "dev"
-      project     = "PagoPA"
-    }
-  }
-}
-
-# Valori per i database Cosmos DB e PostgreSQL
-databases = {
-  cosmos1 = {
-    account_name        = "dev-cosmos1"
-    location            = "West Europe"
+# Definizione dei database Cosmos DB SQL
+cosmosdb_databases = {
+  database1 = {
+    database_name       = "db1-cfc"
     resource_group_name = "dev-rg-cfc"
-    offer_type          = "Standard"
-    consistency_policy  = "Session"
-    tags = {
-      environment = "dev"
-      project     = "PagoPA"
-    }
-  },
-  postgres1 = {
-    account_name        = "dev-postgres1"
-    location            = "West Europe"
+    account_key         = "account1"
+  }
+}
+
+# Definizione dei container Cosmos DB SQL
+# Definizione dei container Cosmos DB SQL
+cosmosdb_containers = {
+  container1 = {
+    container_name      = "container1-cfc"
     resource_group_name = "dev-rg-cfc"
-    offer_type          = "GP_Gen5"
-    consistency_policy  = "Session"
-    admin_password      = "P@ssw0rd!"
-    tags = {
-      environment = "dev"
-      project     = "PagoPA"
+    account_key         = "account1"
+    database_key        = "database1"
+    partition_key_paths = ["/myPartitionKey1"]
+    indexing_policy = {
+      indexing_mode = "consistent"  # Corretto in minuscolo
     }
   }
 }
+
+
+# # Valori per gli storage account
+# storage_accounts = {
+#   storage1 = {
+#     name                    = "devstorage1cfc"
+#     resource_group_name      = "dev-rg-cfc"
+#     location                = "Italy North"
+#     account_tier            = "Standard"
+#     account_replication_type = "LRS"
+#     tags                    = {
+#       environment = "dev"
+#       project     = "PagoPA"
+#     }
+#   }
+# }
+
