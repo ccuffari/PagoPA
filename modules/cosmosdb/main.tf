@@ -4,7 +4,7 @@
 resource "azurerm_cosmosdb_account" "this" {
   for_each = var.cosmosdb_accounts
 
-  name                = each.value.name
+  name                = "${each.value.name}cfc"
   location            = each.value.location
   resource_group_name = each.value.resource_group_name
   offer_type          = "Standard"
@@ -26,7 +26,7 @@ resource "azurerm_cosmosdb_account" "this" {
 resource "azurerm_cosmosdb_sql_database" "this" {
   for_each = var.cosmosdb_databases
 
-  name                = each.value.database_name  # Nome del database SQL
+  name                =   "${each.value.database_name}_cfc" # Nome del database SQL
   resource_group_name = each.value.resource_group_name  # Resource Group
   account_name        = azurerm_cosmosdb_account.this[each.value.account_key].name  # Collegamento all'account Cosmos DB
 }
@@ -35,7 +35,7 @@ resource "azurerm_cosmosdb_sql_database" "this" {
 resource "azurerm_cosmosdb_sql_container" "this" {
   for_each = var.cosmosdb_containers
 
-  name                = each.value.container_name  # Nome del container
+  name                =   "${each.value.container_name}_cfc"# Nome del container
   resource_group_name = each.value.resource_group_name  # Resource Group
   account_name        = azurerm_cosmosdb_account.this[each.value.account_key].name  # Collegamento all'account Cosmos DB
   database_name       = azurerm_cosmosdb_sql_database.this[each.value.database_key].name  # Collegamento al database Cosmos DB

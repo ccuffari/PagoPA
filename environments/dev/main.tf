@@ -12,22 +12,16 @@ data "azurerm_client_config" "current" {}
 # }
 
 module "vnet" {
-  for_each = var.vnet
+  source = "../../modules/vnet"
 
-  source              = "../../modules/vnet"
-  resource_group_name = each.value.resource_group_name
-  location            = each.value.location
-  vnet_name           = each.value.vnet_name
-  address_space       = each.value.address_space
-  subnet_name         = each.value.subnet_name
-  subnet_address_prefix = each.value.subnet_address_prefix
+  vnet = var.vnet
+  subnet = var.subnet
 }
 
 # environment/main.tf
 
 module "key_vault" {
   source = "../../modules/key_vault"
-
   key_vaults = var.key_vaults
   tenant_id  = var.tenant_id
   soft_delete_enabled = var.soft_delete_enabled

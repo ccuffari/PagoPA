@@ -27,7 +27,7 @@ variable "subscription_id" {
 variable "resource_group_name" {
   type        = string
   description = "Nome del resource group esistente"
-  default     = "dev-rg-cfc"
+  default     = "cfc-dev-rg-pagopa"
 }
 
 variable "resource_group_location" {
@@ -37,15 +37,25 @@ variable "resource_group_location" {
 }
 
 variable "vnet" {
+  description = "A map of Virtual Networks to be created"
   type = map(object({
-    resource_group_name    = string
-    location               = string
-    vnet_name              = string
-    address_space          = list(string)
-    subnet_name            = string
-    subnet_address_prefix = list(string)
+    resource_group_name = string
+    location            = string
+    name                = string
+    address_space       = list(string)
   }))
 }
+
+variable "subnet" {
+  description = "A map of Subnets to be created"
+  type = map(object({
+    name                 = string
+    resource_group_name  = string
+    virtual_network_name = string
+    address_prefixes     = list(string)
+  }))
+}
+
 
 # environment/variables.tf
 

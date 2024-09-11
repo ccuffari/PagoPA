@@ -1,21 +1,27 @@
-resource_group_name    = "dev-rg-cfc"
-# Configurazione Virtual Network
 vnet = {
   vnet1 = {
-    resource_group_name    = "dev-rg-cfc"
-    location               = "Italy North"
-    vnet_name              = "vnet-cosmosdb-cfc"
-    address_space          = ["10.0.0.0/16"]
-    subnet_name            = "subnet-cosmosdb-cfc"
-    subnet_address_prefix = ["10.0.1.0/24"]
+    resource_group_name = "cfc-dev-rg-pagopa"
+    location            = "Italy North"
+    name                = "vnet-cosmosdb"
+    address_space       = ["10.0.0.0/16"]
   }
 }
 
+subnet = {
+  subnet1 = {
+    name                 = "subnet-cosmosdb"
+    resource_group_name  = "cfc-dev-rg-pagopa"
+    virtual_network_name = "vnet1"
+    address_prefixes     = ["10.0.1.0/24"]
+  }
+}
+
+
 key_vaults = {
   "kv1" = {
-    name                = "mykeyvault1-cfc"
+    name                = "cfcdevvaultpagopa"
     location            = "Italy North"
-    resource_group_name = "dev-rg-cfc"
+    resource_group_name = "cfc-dev-rg-pagopa"
     sku_name             = "standard"
     tags = {
       environment = "dev"
@@ -35,9 +41,9 @@ tenant_id = "bb1a63eb-eb09-471a-a005-37b07792a5b5"
 # Definizione degli account Cosmos DB
 cosmosdb_accounts = {
   account1 = {
-    name                      = "cosmosdb-account1-cfc"
+    name                      = "dev-cosmosdb-account1-pagopa"
     location                  = "Italy North"
-    resource_group_name       = "dev-rg-cfc"
+    resource_group_name       = "cfc-dev-rg-pagopa"
     consistency_level         = "Strong"
     is_virtual_network_filter_enabled = true
     geo_location              = "Italy North"
@@ -51,8 +57,8 @@ cosmosdb_accounts = {
 # Definizione dei database Cosmos DB SQL
 cosmosdb_databases = {
   database1 = {
-    database_name       = "db1-cfc"
-    resource_group_name = "dev-rg-cfc"
+    database_name       = "dev-db1-pagopa"
+    resource_group_name = "cfc-dev-rg-pagopa"
     account_key         = "account1"
   }
 }
@@ -61,8 +67,8 @@ cosmosdb_databases = {
 # Definizione dei container Cosmos DB SQL
 cosmosdb_containers = {
   container1 = {
-    container_name      = "container1-cfc"
-    resource_group_name = "dev-rg-cfc"
+    container_name      = "dev-container1-pagopa"
+    resource_group_name = "cfc-dev-rg-pagopa"
     account_key         = "account1"
     database_key        = "database1"
     partition_key_paths = ["/myPartitionKey1"]
@@ -76,8 +82,8 @@ cosmosdb_containers = {
 # # Valori per gli storage account
 # storage_accounts = {
 #   storage1 = {
-#     name                    = "devstorage1cfc"
-#     resource_group_name      = "dev-rg-cfc"
+#     name                    = "devstorage1pagopa"
+#     resource_group_name      = "cfc-dev-rg-pagopa"
 #     location                = "Italy North"
 #     account_tier            = "Standard"
 #     account_replication_type = "LRS"
