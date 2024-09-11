@@ -1,65 +1,128 @@
-variable "databases" {
-  description = "Lista di database da creare"
-  type = map(object({
-    account_name       = string
-    resource_group_name = string
-    location            = string
-    consistency_policy  = string
-    offer_type          = string
-  }))
+variable "location" {
+ description = "value"
+ type = string
+ default = "Italy North"
 }
 
-# Variabile opzionale per PostgreSQL
-variable "admin_password" {
-  description = "Password per l'utente amministratore di PostgreSQL (opzionale)"
-  type        = string
-  default     = null
-}
-
-variable "redis_instances" {
-  description = "Lista delle istanze Redis da creare"
-  type = map(object({
-    name                = string
-    location            = string
-    resource_group_name = string
-    capacity            = number
-    family              = string
-    sku_name            = string
-    enable_non_ssl_port = bool
-    minimum_tls_version = string
-    tags                = map(string)
-  }))
-}
-
-variable "storage_accounts" {
-  description = "Lista degli storage account da creare"
-  type = map(object({
-    name                    = string
-    resource_group_name      = string
-    location                = string
-    account_tier            = string
-    account_replication_type = string
-    tags                    = map(string)
-  }))
-}
-
-variable "vm_instances" {
-  description = "Lista delle istanze di macchine virtuali da creare"
-  type = map(object({
-    vm_name              = string
-    location             = string
-    resource_group_name  = string
-    subnet_id            = string
-    vm_size              = string
-    admin_username       = string
-    admin_password       = string # Si potrebbe rendere opzionale come in PostgreSQL
-    tags                 = map(string)
-  }))
-}
+# variable "storage_accounts" {
+#   description = "Lista degli storage account da creare"
+#   type = map(object({
+#     name                    = string
+#     resource_group_name      = string
+#     location                = string
+#     account_tier            = string
+#     account_replication_type = string
+#     tags                    = map(string)
+#   }))
+# }
 
 # Variabile opzionale per PostgreSQL
 variable "subscription_id" {
   description = "nome della subscription"
   type        = string
   default     = "ac4d4066-c9a3-48c6-874b-5173f6dfe58f"
+}
+
+# variables.tf
+variable "resource_group_name" {
+  type        = string
+  description = "Nome del resource group esistente"
+  default     = "cfc-dev-rg-pagopa"
+}
+
+variable "resource_group_location" {
+  type        = string
+  description = "Location del resource group esistente"
+  default = "Italy North"
+}
+
+variable "vnet" {
+  description = "A map of Virtual Networks to be created"
+  type = map(object({
+    resource_group_name = string
+    location            = string
+    name                = string
+    address_space       = list(string)
+  }))
+}
+
+variable "subnet" {
+  description = "A map of Subnets to be created"
+  type = map(object({
+    name                 = string
+    resource_group_name  = string
+    virtual_network_name = string
+    address_prefixes     = list(string)
+  }))
+}
+
+
+# environment/variables.tf
+
+variable "key_vaults" {
+  description = "A map of key vaults to be created"
+  type = map(object({
+    name                = string
+    location            = string
+    resource_group_name = string
+    sku_name             = string
+    tags                = map(string)
+    access_policy       = object({
+      object_id                  = string
+      key_permissions            = list(string)
+      secret_permissions         = list(string)
+      certificate_permissions    = list(string)
+      storage_permissions        = list(string)
+    })
+  }))
+}
+
+variable "tenant_id" {
+  description = "The tenant ID for the Key Vault"
+  type        = string
+}
+
+variable "soft_delete_enabled" {
+  description = "Enable or disable soft delete"
+  type        = bool
+  default     = true
+}
+
+# variables.tf
+
+variable "cosmosdb_accounts" {
+  description = "Map of Cosmos DB accounts to be created"
+  type        = map(object({
+    name                      = string
+    location                  = string
+    resource_group_name       = string
+    consistency_level         = string
+    is_virtual_network_filter_enabled = bool
+    geo_location              = string
+    failover_priority         = number
+    tags                      = map(string)
+  }))
+}
+
+variable "cosmosdb_databases" {
+  description = "Map of Cosmos DB SQL databases to be created"
+  type        = map(object({
+    database_name       = string
+    resource_group_name = string
+    account_key         = string
+  }))
+}
+
+variable "cosmosdb_containers" {
+  description = "Map of Cosmos DB SQL containers to be created"
+  type        = map(object({
+    container_name      = string
+    resource_group_name = string
+    account_key         = string
+    database_key        = string
+    partition_key_paths = list(string)
+    indexing_policy     = object({
+      indexing_mode = string
+    })
+  }))
 }
