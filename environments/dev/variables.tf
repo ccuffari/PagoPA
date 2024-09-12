@@ -56,6 +56,16 @@ variable "subnet" {
   }))
 }
 
+variable "service_accounts" {
+  description = "Mapping of service accounts to create"
+  type = map(object({
+    application_id = string
+    password       = string
+    end_date       = string
+  }))
+}
+
+
 
 # environment/variables.tf
 

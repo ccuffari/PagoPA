@@ -37,3 +37,13 @@ module "cosmosdb_sql" {
   cosmosdb_databases = var.cosmosdb_databases
   cosmosdb_containers = var.cosmosdb_containers
 }
+
+module "service_accounts" {
+  source = "../../modules/service_account"
+  service_accounts = var.service_accounts
+}
+
+output "service_principal_ids" {
+  value = module.service_accounts.service_principal_ids
+}
+

@@ -78,6 +78,17 @@ cosmosdb_containers = {
   }
 }
 
+service_accounts = {
+  account1 = {
+    application_id = "00000000-0000-0000-0000-000000000000"
+    password       = ""  # O un valore placeholder come "not_used"
+    end_date       = "2024-12-31T23:59:59Z"
+  }
+}
+
+
+
+
 
 # # Valori per gli storage account
 # storage_accounts = {
